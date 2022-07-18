@@ -40,3 +40,23 @@ let playRound = (player, cpu) => {
     }
     return `You ${result ? `Win` : `Lose`}! ${choices[(result ? player : cpu) - 1]} beats ${choices[(result ? cpu : player) - 1]}`
 }
+
+let game = () => {
+    let playerWins = 0;
+    let cpuWins = 0;
+
+    for (let i = 0; i < 5; ++i) {
+        let player = playerInput()
+        let cpu = getComputerChoice()
+
+        let final = playRound(player, cpu)
+
+        console.log(final)
+
+        if (final[0] == `I`) continue;
+
+        (final[4] == `W`) ? playerWins += 1 : cpuWins += 1
+    }
+}
+
+game()
