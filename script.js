@@ -1,16 +1,34 @@
 let getComputerChoice = () => Math.floor(Math.random() * 3) + 1;
 
 let  winner = (player, cpu) => {
-    if (cpu == 1 && player == 3) {
-        return 0;
-    } else if (cpu == 3 && player == 1) {
+    if (cpu == player) {
+        return null
+    } else if (player > cpu || (cpu == 3 && player == 1)) {
         return 1;
-    } else if ( player > cpu) {
-        return 1;
-    } else if (cpu > player) {
-        return 0;
     } else {
-        return null;
+        return 0;
+    }
+}
+
+let playerInput = () => {
+    let input = prompt(`Input either Rock Paper or Scissors to play a game`)
+    while (1) {
+        input = input.toLowerCase()
+        switch(input) {
+            case "rock":
+                return 1
+                
+            case "paper":
+                return 2
+                
+            case "scissors":
+                return 3
+                    
+            default:
+                input = prompt(`Input not accepted please try again`)
+                break
+        }
+        
     }
 }
 
