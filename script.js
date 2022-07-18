@@ -3,7 +3,7 @@ let getComputerChoice = () => Math.floor(Math.random() * 3) + 1;
 let  winner = (player, cpu) => {
     if (cpu == player) {
         return null
-    } else if (player > cpu || (cpu == 3 && player == 1)) {
+    } else if ((player > cpu || (cpu == 3 && player == 1)) && (cpu != 1 && player != 3)) {
         return 1;
     } else {
         return 0;
