@@ -20,44 +20,7 @@ cancelBtn.innerText = "cancel";
 
 let buttons = [yesButton, noButton, oneBtn, bestOfThreeBtn, bestOfFiveBtn, upToFiveBtn, cancelBtn]
 
-
-let getComputerChoice = () => Math.floor(Math.random() * 3) + 1;
-
-let  winner = (player, cpu) => {
-    if (cpu == player) {
-        return null
-    } else if ((player > cpu || (cpu == 3 && player == 1)) && (cpu != 1 || player != 3)) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-let playRound = (player, cpu) => {
-    let choices = [`Rock`, `Paper`, `Scissors`]
-    let result = winner(player, cpu)
-    if (result == null) {
-        return "It's a draw"
-    }
-    return `You ${result ? `Win` : `Lose`}! ${choices[(result ? player : cpu) - 1]} beats ${choices[(result ? cpu : player) - 1]}`
-}
-
-let game = () => {
-    let playerWins = 0;
-    let cpuWins = 0;
-
-    for (let i = 0; i < 5; ++i) {
-        let cpu = getComputerChoice()
-
-        let final = playRound(player, cpu)
-
-        console.log(final)
-
-        if (final[0] == `I`) continue;
-
-        (final[4] == `W`) ? playerWins += 1 : cpuWins += 1
-    }
-}
+let mode;
 
 yesButton.addEventListener("click", () => {
     upCont.innerText = "Good!";
@@ -73,10 +36,32 @@ yesButton.addEventListener("click", () => {
         downCont.removeChild(buttons[i]);
 });
 
+oneBtn.addEventListener("click", () => {
+    sessionStorage.setItem("mode", 0);
+    window.location.href = "/game.html";
+});
+
+bestOfThreeBtn.addEventListener("click", () => {
+    sessionStorage.setItem("mode", 1);
+    window.location.href = "/game.html";
+});
+
+bestOfFiveBtn.addEventListener("click", () => {
+    sessionStorage.setItem("mode", 2);
+    window.location.href = "/game.html";
+});
+
+upToFiveBtn.addEventListener("click", () => {
+    sessionStorage.setItem("mode", 3);
+    window.location.href = "/game.html";
+});
+
 cancelBtn.addEventListener("click", () => {
     upCont.innerText = "Don't you want to play with me?";
 
-    downCont.style.padding = "10px 100px"
+    downCont.style.padding = "10px 100px";
+    yesButton.innerText = "I do!";
+    noButton.innerText = "I don't";
 
     for (let i = 2; i < 7; ++i)
         downCont.removeChild(buttons[i]); 

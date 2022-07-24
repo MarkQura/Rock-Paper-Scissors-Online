@@ -9,6 +9,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100%;
+    gap: 50px;
     background: linear-gradient(rgb(45, 163, 231), rgb(120, 183, 223));
 }
 
@@ -88,12 +89,6 @@ img.scissors {
     gap: 40px;
 }
 
-.center-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .center-game-container .left {
     justify-content: center;
     align-items: center;
@@ -127,6 +122,28 @@ img.scissors {
     border: 2px solid black;
     border-radius: 100%;
     padding: 10px;
+}
+
+.up-game-container{
+    font-size: 30px;
+    text-align: center;
+}
+
+.up-game-container p ,
+.up-game-container div{
+    font-size: 20px;
+}
+
+.up-game-container .points{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+}
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .center-container .up {
