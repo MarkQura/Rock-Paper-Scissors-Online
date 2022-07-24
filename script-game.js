@@ -1,26 +1,23 @@
 
-let mode = +sessionStorage.getItem("mode");
+const mode = +sessionStorage.getItem("mode");
 let selected = -1;
 let rounds = 0;
 let playerWins = 0;
 let cpuWins = 0;
-sessionStorage.clear();
+const TIMEOUT = 1000;
 
-let upCont = document.querySelector(".up-game-container");
-let gameCount = document.createElement("p");
-let points = upCont.children[0];
+const upCont = document.querySelector(".up-game-container");
+const downText = document.querySelector(".result");
+const gameCount = document.createElement("p");
+const points = upCont.children[0];
 
-let gameBtns = Array.from(document.querySelectorAll(".left .card"));
-let runBtn = document.querySelector(".middle button");
+const gameBtns = Array.from(document.querySelectorAll(".left .card"));
+const runBtn = document.querySelector(".middle button");
 
-let cpuCard = document.querySelector(".right .card");
+const cpuCard = document.querySelector(".right .card");
+const back = document.querySelector(".back");
 
-gameCount.innerText = "Games played: 0";
-points.children[0].innerText = "You: 0";
-points.children[1].innerText = "Me: 0";
-
-let back = document.querySelector(".back");
-back.addEventListener("click", () => cpuCard.innerHTML = ""); 
+updateText("");
 
 switch (mode) {
     case 0:
@@ -45,6 +42,12 @@ if (mode != 0) {
     upCont.appendChild(points);
 }
 
+function updateText(result) {
+    gameCount.innerText = `Games played: ${rounds}`;
+    points.children[0].innerText = `You: ${playerWins}`;
+    points.children[1].innerText = `Me: ${cpuWins}`;
+    downText.innerText = result;
+}
 
 let getComputerChoice = () => Math.floor(Math.random() * 3) + 1;
 
@@ -109,6 +112,53 @@ let game = () => {
     }
 }
 
+let removeClutter = () => {
+    upCont.removeChild(gameCount);
+    upCont.removeChild(points);
+    downText.innerText = "";
+}
+
+let displayResults = result => {
+
+    let centerCont = document.querySelector(".center-game-container")
+    let tempArr = Array.from(centerCont.children);
+
+    tempArr.forEach(item => centerCont.removeChild(item));
+    centerCont.appendChild(document.createTextNode(result));
+
+    back.innerText = "Back"
+    sessionStorage.clear();
+}
+
+let bestOf = number => {
+
+    if (playerWins == cpuWins + number) {
+
+        setTimeout(() => {
+
+            removeClutter();
+            displayResults(`You Win! You won ${playerWins} games, lost ${cpuWins} games, and tied ${rounds - (playerWins + cpuWins)} games`);
+
+        }, TIMEOUT);
+
+    } else if (cpuWins == playerWins + number){
+
+        setTimeout(() => {
+            
+            removeClutter();
+            displayResults(`You Lose! You won ${playerWins} games, lost ${cpuWins} games, and tied ${rounds - (playerWins + cpuWins)} games`);
+
+        }, TIMEOUT);
+    }
+}
+
+let updateData = result => {
+    ++rounds;
+    
+    if (result[0] != `I`)
+        (result[4] == `W`) ? playerWins += 1 : cpuWins += 1;
+}
+
 gameBtns[0].addEventListener("click", () => {
     cpuCard.innerHTML = "";
     if (selected > -1) {
@@ -121,7 +171,7 @@ gameBtns[0].addEventListener("click", () => {
         selected = -1;
         return;
     }
-
+    
     gameBtns[0].classList.toggle("selected");
     selected = 0;
 });
@@ -138,7 +188,7 @@ gameBtns[1].addEventListener("click", () => {
         selected = -1;
         return;
     }
-
+    
     gameBtns[1].classList.toggle("selected");
     selected = 1;
 });
@@ -162,10 +212,67 @@ gameBtns[2].addEventListener("click", () => {
 
 runBtn.addEventListener("click", () => {
     if (selected == -1) return;
+    
     let cpu = getComputerChoice();
     displayCpuChoice(cpu);
-    console.log(playRound(selected + 1, cpu));
+    
+    let result = playRound(selected + 1, cpu);
+    
     setTimeout(() => {
         cpuCard.innerHTML = "";
-    }, 1000);
+        gameBtns[selected].classList.remove("selected");
+        selected = -1;
+    }, TIMEOUT);
+
+    switch (mode) {
+
+        case 0: {
+            setTimeout(() => {
+
+                displayResults(result);
+
+            }, TIMEOUT);
+            break;
+        }
+
+        case 1: {
+            updateData(result);
+            updateText(result);
+
+            bestOf(2);
+            break;
+        }
+
+        case 2: {
+            updateData(result);
+            updateText(result);
+
+            bestOf(3);
+            break;
+        }
+        case 3: {
+            updateData(result);
+            updateText(result);
+
+            if (playerWins == 5) {
+                setTimeout(() => {
+
+                    removeClutter();
+                    displayResults(`You Win! You won ${playerWins} games, lost ${cpuWins} games, and tied ${rounds - (playerWins + cpuWins)} games`);
+        
+                }, TIMEOUT);
+            } else if (cpuWins == 5) {
+                setTimeout(() => {
+
+                    removeClutter();
+                    displayResults(`You Lose! You won ${playerWins} games, lost ${cpuWins} games, and tied ${rounds - (playerWins + cpuWins)} games`);
+        
+                }, TIMEOUT);
+            }
+            break;
+        }
+    }
 });
+
+
+back.addEventListener("click", () => window.location.href = "./index.html"); 

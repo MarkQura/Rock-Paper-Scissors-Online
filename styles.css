@@ -20,7 +20,7 @@ html {
 button,
 .card {
     font-size: 20px;
-    border: none;
+    border: 2px solid transparent;
     background: none;
     transition: all 0.5s ease;
     border-radius: 10px;
@@ -43,6 +43,7 @@ button.no:hover {
 }
 
 hr.solid {
+    font-size: 20px;
     border: 1px solid black;
     height: 100px;
 }
@@ -76,11 +77,16 @@ img.scissors {
     background: linear-gradient(rgb(233, 125, 53), rgb(219, 149, 103));
 }
 
+.card:hover {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 20px;
+}
+
 .card.selected {
     transform: scale(1.1);
 }
 
 .center-game-container {
+    font-size: 25px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -122,6 +128,16 @@ img.scissors {
     border: 2px solid black;
     border-radius: 100%;
     padding: 10px;
+}
+
+.down-game-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 25px;
+    gap: 10px;
 }
 
 .up-game-container{
