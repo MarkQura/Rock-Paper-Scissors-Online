@@ -77,7 +77,7 @@ img.scissors {
     background: linear-gradient(rgb(233, 125, 53), rgb(219, 149, 103));
 }
 
-.card:hover {
+.cards .card:hover {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 20px;
 }
 

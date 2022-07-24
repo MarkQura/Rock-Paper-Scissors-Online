@@ -1,15 +1,21 @@
-
-const mode = +sessionStorage.getItem("mode");
+let mode;
 let selected = -1;
 let rounds = 0;
 let playerWins = 0;
 let cpuWins = 0;
 const TIMEOUT = 1000;
 
-const upCont = document.querySelector(".up-game-container");
+const body = document.querySelector("body");
+
+const upGameCont = document.querySelector(".up-game-container");
 const downText = document.querySelector(".result");
 const gameCount = document.createElement("p");
-const points = upCont.children[0];
+const points = upGameCont.children[0];
+const downGameCont = document.querySelector(".down-game-container");
+const centerGameCont = document.querySelector(".center-game-container");
+const centerLeft = document.querySelector(".center-game-container .left");
+const centerMiddle = document.querySelector(".center-game-container .middle");
+const centerRight = document.querySelector(".center-game-container .right");
 
 const gameBtns = Array.from(document.querySelectorAll(".left .card"));
 const runBtn = document.querySelector(".middle button");
@@ -17,36 +23,66 @@ const runBtn = document.querySelector(".middle button");
 const cpuCard = document.querySelector(".right .card");
 const back = document.querySelector(".back");
 
-updateText("");
-
-switch (mode) {
-    case 0:
-        upCont.innerText = "We are playing a single game";
-        break;
-
-    case 1:
-        upCont.innerText = "We are playing a best out of three";
-        break;
-
-    case 2:
-        upCont.innerText = "We are playing a best out of five";
-        break;
-    
-    case 3:
-        upCont.innerText = "We are playing until one of us gets five points";
-        break;
-}
-
-if (mode != 0) {
-    upCont.appendChild(gameCount);
-    upCont.appendChild(points);
-}
+body.innerText = "";
 
 function updateText(result) {
     gameCount.innerText = `Games played: ${rounds}`;
     points.children[0].innerText = `You: ${playerWins}`;
     points.children[1].innerText = `Me: ${cpuWins}`;
     downText.innerText = result;
+}
+
+function loadGame() {
+    body.removeChild(centerCont);
+    
+    centerGameCont.innerText = "";
+
+    centerGameCont.appendChild(centerLeft);
+    centerGameCont.appendChild(centerMiddle);
+    centerGameCont.appendChild(centerRight);
+
+    selected = -1;
+    rounds = 0;
+    playerWins = 0;
+    cpuWins = 0;
+
+    switch (mode) {
+        case 0:
+            upGameCont.innerText = "We are playing a single game";
+            break;
+    
+        case 1:
+            upGameCont.innerText = "We are playing a best out of three";
+            break;
+    
+        case 2:
+            upGameCont.innerText = "We are playing a best out of five";
+            break;
+        
+        case 3:
+            upGameCont.innerText = "We are playing until one of us gets five points";
+            break;
+    }
+    
+    if (mode != 0) {
+        upGameCont.appendChild(gameCount);
+        upGameCont.appendChild(points);
+    }
+
+    updateText("");
+
+    body.appendChild(upGameCont);
+    body.appendChild(centerGameCont);
+    body.appendChild(downGameCont);
+}
+
+function loadMenu() {
+    let temp = Array.from(body.children);
+    temp.forEach(item => {
+        body.removeChild(item);
+    });
+
+    body.appendChild(centerCont);
 }
 
 let getComputerChoice = () => Math.floor(Math.random() * 3) + 1;
@@ -98,33 +134,18 @@ let displayCpuChoice = cpu => {
     cpuCard.appendChild(txt);
 }
 
-let game = () => {
-    for (let i = 0; i < 5; ++i) {
-        let cpu = getComputerChoice()
-
-        let final = playRound(player, cpu)
-
-        console.log(final)
-
-        if (final[0] == `I`) continue;
-
-        (final[4] == `W`) ? playerWins += 1 : cpuWins += 1
-    }
-}
-
 let removeClutter = () => {
-    upCont.removeChild(gameCount);
-    upCont.removeChild(points);
+    upGameCont.removeChild(gameCount);
+    upGameCont.removeChild(points);
     downText.innerText = "";
 }
 
 let displayResults = result => {
 
-    let centerCont = document.querySelector(".center-game-container")
-    let tempArr = Array.from(centerCont.children);
+    let tempArr = Array.from(centerGameCont.children);
 
-    tempArr.forEach(item => centerCont.removeChild(item));
-    centerCont.appendChild(document.createTextNode(result));
+    tempArr.forEach(item => centerGameCont.removeChild(item));
+    centerGameCont.appendChild(document.createTextNode(result));
 
     back.innerText = "Back"
     sessionStorage.clear();
@@ -274,5 +295,95 @@ runBtn.addEventListener("click", () => {
     }
 });
 
+back.addEventListener("click", loadMenu);
 
-back.addEventListener("click", () => window.location.href = "./index.html"); 
+
+
+
+let centerCont = document.createElement("div");
+let upCont = document.createElement("div");
+let downCont = document.createElement("div");
+let yesButton = document.createElement("button");
+let noButton = document.createElement("button");
+
+centerCont.classList.add("center-container");
+upCont.classList.add("up");
+downCont.classList.add("down");
+yesButton.classList.add("yes");
+noButton.classList.add("no");
+
+yesButton.innerText = "Yes";
+noButton.innerText = "No";
+upCont.innerText = "Do you want to play a game?";
+
+centerCont.appendChild(upCont);
+centerCont.appendChild(downCont);
+downCont.appendChild(yesButton);
+downCont.appendChild(noButton);
+
+let para = document.createElement("div");
+let oneBtn = document.createElement("button");
+let bestOfThreeBtn = document.createElement("button");
+let bestOfFiveBtn = document.createElement("button");
+let upToFiveBtn = document.createElement("button");
+let cancelBtn = document.createElement("button");
+
+para.innerText = "What type of match do you want to play?";
+oneBtn.innerText = "One game";
+bestOfThreeBtn.innerText = "Best of 3";
+bestOfFiveBtn.innerText = "Best of 5";
+upToFiveBtn.innerText = "Until 5";
+cancelBtn.innerText = "cancel";
+
+let buttons = [yesButton, noButton, oneBtn, bestOfThreeBtn, bestOfFiveBtn, upToFiveBtn, cancelBtn]
+
+yesButton.addEventListener("click", () => {
+    upCont.innerText = "Good!";
+
+    upCont.appendChild(para);
+
+    downCont.style.padding = "10px 50px"
+
+    for (let i = 2; i < 7; ++i)
+        downCont.appendChild(buttons[i]);
+
+    for (let i = 0; i < 2; ++i)
+        downCont.removeChild(buttons[i]);
+});
+
+oneBtn.addEventListener("click", () => {
+    mode = 0;
+    loadGame();
+});
+
+bestOfThreeBtn.addEventListener("click", () => {
+    mode = 1;
+    loadGame();
+});
+
+bestOfFiveBtn.addEventListener("click", () => {
+    mode = 2;
+    loadGame();
+});
+
+upToFiveBtn.addEventListener("click", () => {
+    mode = 3;
+    loadGame();
+});
+
+cancelBtn.addEventListener("click", () => {
+    upCont.innerText = "Don't you want to play with me?";
+
+    downCont.style.padding = "10px 100px";
+    yesButton.innerText = "I do!";
+    noButton.innerText = "I don't";
+
+    for (let i = 2; i < 7; ++i)
+        downCont.removeChild(buttons[i]); 
+
+    for (let i = 0; i < 2; ++i)
+        downCont.appendChild(buttons[i]);
+});
+
+
+loadMenu();
