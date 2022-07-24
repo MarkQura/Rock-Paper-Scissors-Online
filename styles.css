@@ -1,0 +1,55 @@
+body {
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: linear-gradient(rgb(45, 163, 231), rgb(120, 183, 223));
+}
+
+html {
+    height: 100%;
+}
+
+button {
+    font-size: 20px;
+    border: none;
+    background: none;
+    transition: all 0.7s ease;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+button:hover {
+    border: none;
+    transform: scale(1.1);
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+button.yes:hover {
+    color: rgb(9, 128, 9);
+}
+
+button.no:hover {
+    color: red;
+}
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.center-container .up {
+    font-size: 40px;
+    margin: 10px;
+    text-align: center;
+}
+
+.center-container .down {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 100px;
+}

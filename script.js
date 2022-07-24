@@ -1,3 +1,15 @@
+let centerCont = document.querySelector(".center-container");
+let upCont = document.querySelector(".center-container .up");
+let downCont = document.querySelector(".center-container .down");
+let yesButton = document.querySelector("button.yes");
+let noButton = document.querySelector("button.no");
+
+let para;
+let oneBtn;
+let bestOfThreeBtn;
+let bestOfFiveBtn;
+
+
 let getComputerChoice = () => Math.floor(Math.random() * 3) + 1;
 
 let  winner = (player, cpu) => {
@@ -7,28 +19,6 @@ let  winner = (player, cpu) => {
         return 1;
     } else {
         return 0;
-    }
-}
-
-let playerInput = () => {
-    let input = prompt(`Input either Rock Paper or Scissors to play a game`)
-    while (1) {
-        input = input.toLowerCase()
-        switch(input) {
-            case "rock":
-                return 1
-                
-            case "paper":
-                return 2
-                
-            case "scissors":
-                return 3
-                    
-            default:
-                input = prompt(`Input not accepted please try again`)
-                break
-        }
-        
     }
 }
 
@@ -46,7 +36,6 @@ let game = () => {
     let cpuWins = 0;
 
     for (let i = 0; i < 5; ++i) {
-        let player = playerInput()
         let cpu = getComputerChoice()
 
         let final = playRound(player, cpu)
@@ -59,6 +48,27 @@ let game = () => {
     }
 }
 
-winner(3, 1)
+yesButton.addEventListener("click", () => {
+    upCont.innerText = "Good!";
 
-game()
+    para = document.createElement("div");
+    oneBtn = document.createElement("button");
+    bestOfThreeBtn = document.createElement("button");
+    bestOfFiveBtn = document.createElement("button");
+
+    para.innerText = "What type of match do you want to play?";
+    oneBtn.innerText = "One game";
+    bestOfThreeBtn.innerText = "Best of three";
+    bestOfFiveBtn.innerText = "Best of five";
+
+    upCont.appendChild(para);
+
+    downCont.appendChild(oneBtn);
+    downCont.appendChild(bestOfThreeBtn);
+    downCont.appendChild(bestOfFiveBtn);
+
+    downCont.removeChild(yesButton);
+    downCont.removeChild(noButton);
+});
+
+noButton.addEventListener("click", () => console.log("oh no!"));
