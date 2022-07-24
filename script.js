@@ -4,10 +4,21 @@ let downCont = document.querySelector(".center-container .down");
 let yesButton = document.querySelector("button.yes");
 let noButton = document.querySelector("button.no");
 
-let para;
-let oneBtn;
-let bestOfThreeBtn;
-let bestOfFiveBtn;
+let para = document.createElement("div");
+let oneBtn = document.createElement("button");
+let bestOfThreeBtn = document.createElement("button");
+let bestOfFiveBtn = document.createElement("button");
+let upToFiveBtn = document.createElement("button");
+let cancelBtn = document.createElement("button");
+
+para.innerText = "What type of match do you want to play?";
+oneBtn.innerText = "One game";
+bestOfThreeBtn.innerText = "Best of 3";
+bestOfFiveBtn.innerText = "Best of 5";
+upToFiveBtn.innerText = "Until 5";
+cancelBtn.innerText = "cancel";
+
+let buttons = [yesButton, noButton, oneBtn, bestOfThreeBtn, bestOfFiveBtn, upToFiveBtn, cancelBtn]
 
 
 let getComputerChoice = () => Math.floor(Math.random() * 3) + 1;
@@ -51,24 +62,29 @@ let game = () => {
 yesButton.addEventListener("click", () => {
     upCont.innerText = "Good!";
 
-    para = document.createElement("div");
-    oneBtn = document.createElement("button");
-    bestOfThreeBtn = document.createElement("button");
-    bestOfFiveBtn = document.createElement("button");
-
-    para.innerText = "What type of match do you want to play?";
-    oneBtn.innerText = "One game";
-    bestOfThreeBtn.innerText = "Best of three";
-    bestOfFiveBtn.innerText = "Best of five";
-
     upCont.appendChild(para);
 
-    downCont.appendChild(oneBtn);
-    downCont.appendChild(bestOfThreeBtn);
-    downCont.appendChild(bestOfFiveBtn);
+    downCont.style.padding = "10px 50px"
 
-    downCont.removeChild(yesButton);
-    downCont.removeChild(noButton);
+    for (let i = 2; i < 7; ++i)
+        downCont.appendChild(buttons[i]);
+
+    for (let i = 0; i < 2; ++i)
+        downCont.removeChild(buttons[i]);
 });
 
-noButton.addEventListener("click", () => console.log("oh no!"));
+cancelBtn.addEventListener("click", () => {
+    upCont.innerText = "Don't you want to play with me?";
+
+    downCont.style.padding = "10px 100px"
+
+    for (let i = 2; i < 7; ++i)
+        downCont.removeChild(buttons[i]); 
+
+    for (let i = 0; i < 2; ++i)
+        downCont.appendChild(buttons[i]);
+});
+
+noButton.addEventListener("click", () => {
+
+});
