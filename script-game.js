@@ -23,7 +23,7 @@ const runBtn = document.querySelector(".middle button");
 const cpuCard = document.querySelector(".right .card");
 const back = document.querySelector(".back");
 
-body.innerText = "";
+body.innerHTML = "";
 
 function updateText(result) {
     gameCount.innerText = `Games played: ${rounds}`;
@@ -36,6 +36,10 @@ function loadGame() {
     body.removeChild(centerCont);
     
     centerGameCont.innerText = "";
+
+    if (selected > -1) {
+        gameBtns[selected].classList.remove("selected");
+    }
 
     centerGameCont.appendChild(centerLeft);
     centerGameCont.appendChild(centerMiddle);
@@ -62,11 +66,18 @@ function loadGame() {
         case 3:
             upGameCont.innerText = "We are playing until one of us gets five points";
             break;
+        case 4:
+            upGameCont.innerText = "You should have said yes!!!";
+            break;
     }
     
-    if (mode != 0) {
+    if (mode) {
         upGameCont.appendChild(gameCount);
         upGameCont.appendChild(points);
+    }
+    
+    if (mode == 4) {
+        downGameCont.removeChild(back);
     }
 
     updateText("");
@@ -292,6 +303,11 @@ runBtn.addEventListener("click", () => {
             }
             break;
         }
+
+        case 4:
+            updateData(result);
+            updateText(result);
+            return;
     }
 });
 
@@ -327,18 +343,25 @@ let bestOfThreeBtn = document.createElement("button");
 let bestOfFiveBtn = document.createElement("button");
 let upToFiveBtn = document.createElement("button");
 let cancelBtn = document.createElement("button");
+let wrongBtn = document.createElement("button");
+let rightBtn = document.createElement("button");
 
-para.innerText = "What type of match do you want to play?";
 oneBtn.innerText = "One game";
 bestOfThreeBtn.innerText = "Best of 3";
 bestOfFiveBtn.innerText = "Best of 5";
 upToFiveBtn.innerText = "Until 5";
 cancelBtn.innerText = "cancel";
+wrongBtn.innerText = "You though wrong";
+rightBtn.innerText = "I guess I can play";
 
-let buttons = [yesButton, noButton, oneBtn, bestOfThreeBtn, bestOfFiveBtn, upToFiveBtn, cancelBtn]
+wrongBtn.classList.add("no");
+rightBtn.classList.add("yes");
+
+let buttons = [yesButton, noButton, oneBtn, bestOfThreeBtn, bestOfFiveBtn, upToFiveBtn, cancelBtn, rightBtn, wrongBtn];
 
 yesButton.addEventListener("click", () => {
     upCont.innerText = "Good!";
+    para.innerText = "What type of match do you want to play?";
 
     upCont.appendChild(para);
 
@@ -349,6 +372,38 @@ yesButton.addEventListener("click", () => {
 
     for (let i = 0; i < 2; ++i)
         downCont.removeChild(buttons[i]);
+});
+
+noButton.addEventListener("click", () => {
+    upCont.innerText = "WHAT?!";
+    para.innerText = "I thought you came here to play with me";
+    upCont.appendChild(para);
+
+    for (let i = 0; i < 2; ++i)
+        downCont.removeChild(buttons[i]);
+
+    for (let i = 7; i < 9; ++i)
+        downCont.appendChild(buttons[i]);
+});
+
+rightBtn.addEventListener("click", () => {
+    upCont.innerText = "Good!";
+    para.innerText = "What type of match do you want to play?";
+
+    upCont.appendChild(para);
+
+    downCont.style.padding = "10px 50px"
+
+    for (let i = 2; i < 7; ++i)
+        downCont.appendChild(buttons[i]);
+
+    for (let i = 7; i < 9; ++i)
+        downCont.removeChild(buttons[i]);
+});
+
+wrongBtn.addEventListener("click", () => {
+    mode = 4;
+    loadGame();
 });
 
 oneBtn.addEventListener("click", () => {
@@ -384,6 +439,5 @@ cancelBtn.addEventListener("click", () => {
     for (let i = 0; i < 2; ++i)
         downCont.appendChild(buttons[i]);
 });
-
 
 loadMenu();
